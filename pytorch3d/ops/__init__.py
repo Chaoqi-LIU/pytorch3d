@@ -32,6 +32,7 @@ from .points_to_volumes import (
 )
 
 from .sample_farthest_points import sample_farthest_points
+from .chaoqi_sample_farthest_points import chaoqi_sample_farthest_points
 
 from .sample_points_from_meshes import sample_points_from_meshes
 from .subdivide_meshes import SubdivideMeshes

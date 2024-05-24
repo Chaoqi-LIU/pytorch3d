@@ -30,6 +30,7 @@
 #include "rasterize_meshes/rasterize_meshes.h"
 #include "rasterize_points/rasterize_points.h"
 #include "sample_farthest_points/sample_farthest_points.h"
+#include "chaoqi_sample_farthest_points/chaoqi_sample_farthest_points.h"
 #include "sample_pdf/sample_pdf.h"
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
@@ -46,6 +47,7 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("knn_points_backward", &KNearestNeighborBackward);
   m.def("ball_query", &BallQuery);
   m.def("sample_farthest_points", &FarthestPointSampling);
+  m.def("chaoqi_sample_farthest_points", &ChaoqiFarthestPointSampling);
   m.def(
       "mesh_normal_consistency_find_verts", &MeshNormalConsistencyFindVertices);
   m.def("gather_scatter", &GatherScatter);
