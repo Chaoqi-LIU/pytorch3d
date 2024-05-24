@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from pytorch3d.structures import Pointclouds
 
 
-def masked_gather(points: torch.Tensor, idx: torch.Tensor) -> torch.Tensor:
+def masked_gather(points: torch.Tensor, idx: torch.Tensor, padded_value: Optional[float] = 0.0) -> torch.Tensor:
     """
     Helper function for torch.gather to collect the points at
     the given indices in idx where some of the indices might be -1 to
@@ -29,6 +29,7 @@ def masked_gather(points: torch.Tensor, idx: torch.Tensor) -> torch.Tensor:
         points: (N, P, D) float32 tensor of points
         idx: (N, K) or (N, P, K) long tensor of indices into points, where
             some indices are -1 to indicate padding
+        padded_value: optional, float value for padding in points, default 0.0
 
     Returns:
         selected_points: (N, K, D) float32 tensor of points
@@ -61,7 +62,7 @@ def masked_gather(points: torch.Tensor, idx: torch.Tensor) -> torch.Tensor:
     # Gather points
     selected_points = points.gather(dim=1, index=idx_expanded)
     # Replace padded values
-    selected_points[idx_expanded_mask] = 0.0
+    selected_points[idx_expanded_mask] = padded_value
     return selected_points
 
 

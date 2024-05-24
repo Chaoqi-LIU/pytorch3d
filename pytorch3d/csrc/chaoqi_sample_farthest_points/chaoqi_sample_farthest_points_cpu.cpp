@@ -2,6 +2,7 @@
 #include <iterator>
 #include <random>
 #include <vector>
+#include <iostream>
 
 at::Tensor ChaoqiFarthestPointSamplingCpu(
     const at::Tensor& points,
@@ -86,8 +87,10 @@ at::Tensor ChaoqiFarthestPointSamplingCpu(
       last_idx = std::distance(dists.begin(), itr);
 
       // early stop if radius is reached
-      if (dists[last_idx] <= r_a[n])
+      // since dist is squared, we compare with radius^2
+      if (*itr <= r_a[n] * r_a[n]) {
         break;
+      }
 
       // Save selected point
       sampled_indices_a[n][k] = last_idx;

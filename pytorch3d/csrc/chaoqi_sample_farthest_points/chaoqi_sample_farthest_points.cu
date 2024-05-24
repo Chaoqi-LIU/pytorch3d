@@ -80,17 +80,19 @@ __global__ void ChaoqiFarthestPointSamplingKernel(
     // max_dist, max_dist_idx are now the max point and idx seen by this thread.
     // Now find the index corresponding to the maximum distance seen by any
     // thread. (This value is only on thread 0.)
-    selected =
+    cub::KeyValuePair<int64_t, float> global_max_dist_pair =
         BlockReduce(temp_storage)
             .Reduce(
                 cub::KeyValuePair<int64_t, float>(max_dist_idx, max_dist),
                 cub::ArgMax(),
-                block_size)
-            .key;
-
+                block_size);
+    selected = global_max_dist_pair.key;
+  
     // early stop if radius is reached
-    if (max_dist < r_n)
+    // since the distance is squared, we compare with radius^2
+    if (global_max_dist_pair.value <= r_n * r_n) {
       break;
+    }
 
     if (tid == 0) {
       // Write the farthest point for iteration k to global memory

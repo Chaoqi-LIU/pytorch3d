@@ -96,6 +96,6 @@ def chaoqi_sample_farthest_points(
     with torch.no_grad():
         # pyre-fixme[16]: `pytorch3d_._C` has no attribute `sample_farthest_points`.
         idx = _C.chaoqi_sample_farthest_points(points, lengths, R, K, start_idxs)
-    sampled_points = masked_gather(points, idx)
+    sampled_points = masked_gather(points, idx, float('nan'))
 
     return sampled_points, idx
