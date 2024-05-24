@@ -1,11 +1,3 @@
-/*
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 #include <ATen/ATen.h>
 #include <ATen/cuda/CUDAContext.h>
 #include <c10/cuda/CUDAGuard.h>
@@ -20,7 +12,7 @@ __global__ void ChaoqiFarthestPointSamplingKernel(
     // clang-format off
     const at::PackedTensorAccessor64<float, 3, at::RestrictPtrTraits> points,
     const at::PackedTensorAccessor64<int64_t, 1, at::RestrictPtrTraits> lengths,
-    const at::PackedTensorAccessor64<int64_t, 1, at::RestrictPtrTraits> R,
+    const at::PackedTensorAccessor64<float, 1, at::RestrictPtrTraits> R,
     const at::PackedTensorAccessor64<int64_t, 1, at::RestrictPtrTraits> K,
     at::PackedTensorAccessor64<int64_t, 2, at::RestrictPtrTraits> idxs,
     at::PackedTensorAccessor64<float, 2, at::RestrictPtrTraits> min_point_dist,
@@ -173,7 +165,7 @@ at::Tensor ChaoqiFarthestPointSamplingCuda(
   auto points_a = points.packed_accessor64<float, 3, at::RestrictPtrTraits>();
   auto lengths_a =
       lengths.packed_accessor64<int64_t, 1, at::RestrictPtrTraits>();
-  auto R_a = R.packed_accessor64<int64_t, 1, at::RestrictPtrTraits>();
+  auto R_a = R.packed_accessor64<float, 1, at::RestrictPtrTraits>();
   auto K_a = K.packed_accessor64<int64_t, 1, at::RestrictPtrTraits>();
   auto idxs_a = idxs.packed_accessor64<int64_t, 2, at::RestrictPtrTraits>();
   auto start_idxs_a =
